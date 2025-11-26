@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VÉRSE | Catálogo G5</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #090909;
+            --card-dark: #121212;
+            --accent: #ffffff;
+            --text-gray: #a0a0a0;
+            --wholesale-color: #00d26a; 
+            --retail-color: #e0e0e0;
+            --primary-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            padding-top: 60px; /* Ajustado para móvil */
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background-color: rgba(9, 9, 9, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #222;
+            padding: 10px 0;
+        }
+        .navbar-brand {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(180deg, rgba(9,9,9,0.7) 0%, var(--bg-dark) 100%), url('https://images.unsplash.com/photo-1552346154-21d32cc40560?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            padding: 50px 20px 30px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.8rem; /* Tamaño base */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .hero p {
+            font-size: 0.9rem;
+        }
+
+        /* CONTROLES */
+        .controls-section {
+            background-color: var(--card-dark);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #222;
+            margin-bottom: 20px;
+        }
+        .filters-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Ocultar scrollbar en Firefox */
+        }
+        .filters-container::-webkit-scrollbar { display: none; /* Ocultar en Chrome/Safari */ }
+
+        .btn-filter {
+            background: transparent;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 50px;
+            padding: 6px 16px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            transition: 0.3s;
+        }
+        .btn-filter:hover, .btn-filter.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+        .search-box {
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 50px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: #fff;
+            background: #000;
+            color: #fff;
+        }
+
+        /* TARJETAS */
+        .product-card {
+            background-color: var(--card-dark);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1f1f1f;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+        .product-card:hover {
+            border-color: #444;
+        }
+        .card-img-container {
+            width: 100%;
+            padding-top: 100%; /* Cuadrado perfecto */
+            position: relative;
+            background: #1a1a1a;
+        }
+        .card-img-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .card-body {
+            padding: 10px; /* Padding reducido general */
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .brand-tag { 
+            font-size: 0.6rem; 
+            text-transform: uppercase; 
+            color: var(--text-gray); 
+            font-weight: 700; 
+            margin-bottom: 2px; 
+        }
+        .product-title { 
+            font-weight: 700; 
+            font-size: 0.9rem; 
+            margin-bottom: 10px; 
+            line-height: 1.2; 
+            /* Truncar texto largo */
+            display: -webkit-box;
+            /* Standard property for browsers that implement the spec */
+            line-clamp: 2;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 2.4em; /* Altura fija para alineación */
+        }
+        .mt-auto-card { margin-top: auto; }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #000;
+            padding: 6px 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        .price-col { display: flex; flex-direction: column; }
+        .price-label { font-size: 0.55rem; text-transform: uppercase; color: var(--text-gray); }
+        .price-val { font-weight: 700; font-size: 0.85rem; }
+        .price-wholesale { color: var(--wholesale-color); }
+        .price-retail { color: var(--retail-color); }
+
+        .btn-view {
+            width: 100%;
+            background: #fff;
+            color: #000;
+            font-weight: 800;
+            text-transform: uppercase;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+
+        /* MODAL */
+        .modal-content { background-color: #1a1a1a; color: #fff; border: 1px solid #333; }
+        .modal-header { border-bottom: 1px solid #333; padding: 10px 15px; }
+        .modal-footer { border-top: 1px solid #333; padding: 10px 15px; }
+        .btn-close { filter: invert(1); }
+        
+        .size-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid #444;
+            color: #fff;
+            font-size: 0.8rem;
+            margin: 2px;
+            transition: 0.2s;
+        }
+        .size-btn:hover, .size-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+            font-weight: bold;
+        }
+
+        .thumbnail-img {
+            width: 45px; height: 45px; object-fit: cover; 
+            cursor: pointer; border: 2px solid var(--card-dark); border-radius: 4px;
+        }
+        .thumbnail-img.active { border-color: var(--primary-color) !important; }
+
+        /* Floating WhatsApp */
+        .float-wa {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        /* --- OPTIMIZACIÓN EXCLUSIVA PARA CELULARES (MEDIA QUERIES) --- */
+        @media (max-width: 576px) {
+            /* Ajustar márgenes laterales del contenedor principal */
+            .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            
+            /* Ajustar espaciado de la grilla */
+            .row.g-3 {
+                --bs-gutter-x: 0.5rem; /* Menos espacio horizontal entre tarjetas */
+                --bs-gutter-y: 0.5rem; /* Menos espacio vertical */
+            }
+
+            /* Precios apilados en móvil para mejor lectura */
+            .price-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+                padding: 5px;
+            }
+            .price-col {
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+                border-right: none !important;
+                border-bottom: 1px solid #222;
+                padding-bottom: 2px;
+                margin-right: 0 !important;
+            }
+            .price-col:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+            .price-label { margin-right: 5px; }
+
+            /* Ajuste de Hero */
+            .hero h1 { font-size: 2.2rem; }
+        }
+
+        /* Escritorio */
+        @media (min-width: 768px) {
+            .hero h1 { font-size: 4.5rem; }
+            .hero { padding: 100px 20px 60px; }
+            .card-body { padding: 15px; }
+            .product-title { font-size: 1rem; height: 2.6em; }
+            .price-val { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand fixed-top">
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">VÉRSE</a>
+            <div class="ms-auto d-flex align-items-center text-white small">
+                <a href="https://wa.link/7ll4cg" class="text-white text-decoration-none border border-secondary rounded-pill px-3 py-1">
+                    <i class="bi bi-whatsapp me-1"></i> Contacto
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>Catálogo 2025</h1>
+            <p class="lead text-secondary fs-6">Sneakers Calidad G5</p>
+        </div>
+    </header>
+
+    <div class="container mb-5">
+        
+        <div class="controls-section">
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-black border-dark text-secondary"><i class="bi bi-search"></i></span>
+                        <input type="text" id="searchInput" class="form-control search-box" placeholder="Buscar modelo...">
+                    </div>
+                </div>
+                <div class="col-12 col-md-8">
+                    <div class="filters-container">
+                        <button class="btn btn-filter active" onclick="filterProducts('all')">Todos</button>
+                        <button class="btn btn-filter" onclick="filterProducts('Adidas')">Adidas</button>
+                        <button class="btn btn-filter" onclick="filterProducts('Nike')">Nike</button>
+                        <button class="btn btn-filter" onclick="filterProducts('Vans')">Vans</button>
+                        <button class="btn btn-filter" onclick="filterProducts('Puma')">Puma</button>
+                        <button class="btn btn-filter" onclick="filterProducts('NB')">New Balance</button>
+                        <button class="btn btn-filter" onclick="filterProducts('DC')">DC</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3" id="productGrid"></div>
+
+    </div>
+
+    <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold fs-6" id="modalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" id="modalImage" class="img-fluid rounded mb-3 shadow-sm" style="max-height: 280px; object-fit:contain;">
+                    
+                    <div id="modalThumbnails" class="d-flex justify-content-center gap-2 mb-3">
+                        </div>
+                    
+                    <p class="text-secondary small mb-2" id="modalDesc"></p>
+                    
+                    <div class="mb-3">
+                       
+                        <div class="d-flex justify-content-center flex-wrap" id="sizeContainer">
+                            </div>
+                        <div id="sizeAlert" class="text-danger small mt-2 d-none fw-bold">
+              
+                        </div>
+                    </div>
+
+                    <div class="bg-black p-3 rounded d-flex justify-content-between align-items-center">
+                        <div class="text-start">
+                            <small class="text-muted d-block" style="font-size: 0.65rem;">MINORISTA</small>
+                            <span class="h5 text-white mb-0" id="modalRetail"></span>
+                        </div>
+                        <div class="text-end border-start ps-3 border-secondary">
+                            <small class="text-success d-block fw-bold" style="font-size: 0.65rem;">MAYORISTA</small>
+                            <span class="h4 text-success mb-0 fw-bold" id="modalWholesale"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button onclick="sendToWhatsapp()" class="btn btn-success w-100 fw-bold py-2">
+                        PEDIR AHORA <i class="bi bi-whatsapp ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.link/7ll4cg" class="float-wa" target="_blank">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <footer class="text-center py-5 border-top border-dark mt-5">
+        <p class="text-muted mb-2 small">VÉRSE © 2025</p>
+        <div class="small text-secondary">
+            <i class="bi bi-geo-alt-fill me-1"></i> La Rioja, Argentina
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // BASE DE DATOS COMPLETA
+        const products = [
+            { id: 1, name: "Adidas Forum Bad Bunny Marrón", brand: "Adidas", retail: "$88.500", wholesale: "$73.000", img: "https://i.imgur.com/c3hoWYJ.jpeg", desc: "Talles: 39, 40",
+              images: [
+                  "https://i.imgur.com/c3hoWYJ.jpeg", // Imagen Principal
+                  "https://i.imgur.com/lpdhO9w.jpeg",
+                  "https://i.imgur.com/0Vnzut0.png" // Imagen de ejemplo 2
+              ]
+            },
+            { id: 2, name: "Adidas Forum Bad Bunny Blanca", brand: "Adidas", retail: "$88.500", wholesale: "$73.000", img: "https://i.imgur.com/6FWGPln.png", desc: "Talles: 35, 40, 41, 42",
+              images: ["https://i.imgur.com/6FWGPln.png", "https://i.imgur.com/8dl31cd.png"]
+            },
+            { id: 3, name: "Adidas Forum Bad Bunny Gris", brand: "Adidas", retail: "$88.500", wholesale: "$73.000", img: "https://i.imgur.com/dR8fm3L.png", desc: "Talles: 35, 36, 37, 38, 39 40, 41",
+              images: ["https://i.imgur.com/dR8fm3L.png", "https://i.imgur.com/9lENN78.png"], 
+            },
+            { id: 4, name: "Adidas Forum Bad Bunny Negra", brand: "Adidas", retail: "$88.500", wholesale: "$73.000", img: "https://i.imgur.com/muJ4v82.png", desc: "Talles: 35, 39 40, 41, 42",
+              images: ["https://i.imgur.com/muJ4v82.png"] 
+            },
+            { id: 5, name: "Adidas Forum Bad Bunny Rosa", brand: "Adidas", retail: "$88.500", wholesale: "$73.000", img: "https://i.imgur.com/gCq8kn2.png", desc: "Talles: 35",
+              images: ["https://i.imgur.com/gCq8kn2.png"] 
+            },
+            { id: 6, name: "Adidas Forum Bad Bunny Celeste", brand: "Adidas", retail: "$88.500", wholesale: "$73.000", img: "https://i.imgur.com/D1jWi9g.png", desc: "Talles: 35, 37, 38",
+              images: ["https://i.imgur.com/D1jWi9g.png", "https://i.imgur.com/8ZeeZ6W.png"] 
+            },
+            { id: 7, name: "Adidas Campus Bad Bunny Negra", brand: "Adidas", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/dPN9wXa.png", desc: "Talles: 35, 37, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/dPN9wXa.png"] 
+            },
+            { id: 8, name: "Adidas Campus Bad Bunny blanca", brand: "Adidas", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/F1x5z5X.png", desc: "Talles: 37, 38, 41",
+              images: ["https://i.imgur.com/F1x5z5X.png"] 
+            },
+            { id: 9, name: "Adidas Campus Bad Bunny Beige", brand: "Adidas", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/xElQ61H.png", desc: "Talles: SIN STOCK",
+              images: ["https://i.imgur.com/xElQ61H.png","https://i.imgur.com/BsqHAME.png"] 
+            },
+            { id: 10, name: "Adidas Campus All black", brand: "Adidas", retail: "$73.000", wholesale: "$67.000", img: "https://i.imgur.com/otK9iKZ.png", desc: "Talles: 35, 37, 38, 39, 40, 41, 42, 43, 44",
+              images: ["https://i.imgur.com/otK9iKZ.png","https://i.imgur.com/ven8vUG.png"] 
+            },
+            { id: 11, name: "Adidas Campus Blanca y Negra", brand: "Adidas", retail: "$73.000", wholesale: "$67.000", img: "https://i.imgur.com/5KML0o8.png", desc: "Talles: 35, 37, 38, 39, 40, 41, 42, 43, 44",
+              images: ["https://i.imgur.com/5KML0o8.png","https://i.imgur.com/RdnMpkq.png"] 
+            },
+            { id: 12, name: "Adidas Campus Beige", brand: "Adidas", retail: "$73.000", wholesale: "$67.000", img: "https://i.imgur.com/rtpOQaN.png", desc: "Talles: 35, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/rtpOQaN.png"] 
+            },
+            { id: 13, name: "Adidas Campus Gris", brand: "Adidas", retail: "$73.000", wholesale: "$67.000", img: "https://i.imgur.com/wQmfYVD.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/wQmfYVD.png","https://i.imgur.com/QgpATOc.png"] 
+            },
+            { id: 14, name: "Adidas Campus Negro y Blanco", brand: "Adidas", retail: "$73.000", wholesale: "$67.000", img: "https://i.imgur.com/1Bq0YzM.png", desc: "Talles: 35, 36, 37, 39, 40, 42, 43",
+              images: ["https://i.imgur.com/1Bq0YzM.png","https://i.imgur.com/IHg2BRm.png"] 
+            },
+            { id: 15, name: "Adidas Adi2000 All black", brand: "Adidas", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/htpWj9o.png", desc: "Talles: 40, 41, 42, 43",
+              images: ["https://i.imgur.com/htpWj9o.png","https://i.imgur.com/31O41wR.png","https://i.imgur.com/N6V7qL0.png"] 
+            },
+            { id: 16, name: "Adidas Adi2000 Negro y Blanco", brand: "Adidas", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/Z82aNa4.png", desc: "Talles: 40, 41, 42, 43",
+              images: ["https://i.imgur.com/Z82aNa4.png","https://i.imgur.com/RwFwijx.png"] 
+            },
+            { id: 17, name: "Adidas Adi2000 Gris", brand: "Adidas", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/dmGscmW.png", desc: "Talles: 40, 41, 42, 43",
+              images: ["https://i.imgur.com/dmGscmW.png","https://i.imgur.com/PfFm4TF.png"] 
+            },
+            { id: 18, name: "Adidas Adi2000 Beige", brand: "Adidas", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/zXLcyIe.png", desc: "Talles: 40, 41, 42, 43",
+              images: ["https://i.imgur.com/zXLcyIe.png","https://i.imgur.com/Z9NrK05.png"] 
+            },
+            { id: 19, name: "Adidas Adi2000 Blanco", brand: "Adidas", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/xVvWbNu.png", desc: "Talles: 40, 41, 42, 43",
+              images: ["https://i.imgur.com/xVvWbNu.png"] 
+            },
+            { id: 20, name: "Adidas Adi2000 Blanca y Beige", brand: "Adidas", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/mCWvnl5.png", desc: "Talles: 40, 41, 42, 43",
+              images: ["https://i.imgur.com/mCWvnl5.png", "https://i.imgur.com/oZUPoUq.png"] 
+            },
+            { id: 21, name: "Adidas Samba Blanca", brand: "Adidas", retail: "$77.000", wholesale: "$66.000", img: "https://i.imgur.com/LRkdTLY.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/LRkdTLY.png"] 
+            },
+            { id: 22, name: "Adidas Samba Negra", brand: "Adidas", retail: "$77.000", wholesale: "$66.000", img: "https://i.imgur.com/7CQ1BBD.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/7CQ1BBD.png","https://i.imgur.com/rx6W8Kc.png"] 
+            },
+            { id: 23, name: "Ojota Adidas Negra", brand: "Adidas", retail: "$33.000", wholesale: "$25.000", img: "https://i.imgur.com/2074Jc8.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43, 44",
+              images: ["https://i.imgur.com/2074Jc8.png","https://i.imgur.com/TvEH8IL.png"] 
+            },
+            { id: 24, name: "Ojota Adidas Verde", brand: "Adidas", retail: "$33.000", wholesale: "$25.000", img: "https://i.imgur.com/FLONsut.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43, 44",
+              images: ["https://i.imgur.com/FLONsut.png","https://i.imgur.com/VajwLx7.png"] 
+            },
+            { id: 25, name: "Ojota Adidas Beige", brand: "Adidas", retail: "$33.000", wholesale: "$25.000", img: "https://i.imgur.com/gixhnIF.png", desc: "Talles: 35, 36, 37, 38, 39, 40",
+              images: ["https://i.imgur.com/gixhnIF.png"] 
+            },
+            { id: 26, name: "Vans Knu Skool All black", brand: "Vans", retail: "$77.000", wholesale: "$63.000", img: "https://i.imgur.com/pbCm0xR.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/pbCm0xR.png","https://i.imgur.com/Ia3HV97.png","https://i.imgur.com/6RFad32.png"]
+            },
+            { id: 27, name: "Vans Knu Skool Blancas", brand: "Vans", retail: "$77.000", wholesale: "$63.000", img: "https://i.imgur.com/v43yF3M.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/v43yF3M.png","https://i.imgur.com/TIs0icM.png"]
+            },
+            { id: 28, name: "Vans Knu Skool Negro y blanco", brand: "Vans", retail: "$77.000", wholesale: "$63.000", img: "https://i.imgur.com/27oJGey.png", desc: "Talles: 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/27oJGey.png","https://i.imgur.com/dAgYDgp.png"]
+            },
+            { id: 29, name: "Vans Knu Skool Negro y azul", brand: "Vans", retail: "$77.000", wholesale: "$63.000", img: "https://i.imgur.com/J0t3Rq2.png", desc: "Talles: 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/J0t3Rq2.png","https://i.imgur.com/u9J8aZE.png"]
+            },
+            { id: 30, name: "Vans Knu Skool Beige", brand: "Vans", retail: "$77.000", wholesale: "$63.000", img: "https://i.imgur.com/TdSAKkG.png", desc: "Talles: 35, 36, 37, 38, 39, 40",
+              images: ["https://i.imgur.com/TdSAKkG.png"]
+            },
+            { id: 31, name: "Vans Upland Negra", brand: "Vans", retail: "$79.500", wholesale: "$66.000", img: "https://i.imgur.com/e4A0qLz.png", desc: "Talles: 41",
+              images: ["https://i.imgur.com/e4A0qLz.png"]
+            },
+            { id: 32, name: "Vans Upland Negra y Blanca", brand: "Vans", retail: "$79.500", wholesale: "$66.000", img: "https://i.imgur.com/BFGkFWK.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/BFGkFWK.png"]
+            },
+            { id: 33, name: "Vans Upland Blanca", brand: "Vans", retail: "$79.500", wholesale: "$66.000", img: "https://i.imgur.com/PcjVhhe.png", desc: "Talles: 38, 39, 40",
+              images: ["https://i.imgur.com/PcjVhhe.png"]
+            },
+            { id: 34, name: "Vans Hylane Marron", brand: "Vans", retail: "$79.500", wholesale: "$66.000", img: "https://i.imgur.com/dGmumDa.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/dGmumDa.png","https://i.imgur.com/7JT2YHF.png"]
+            },
+            { id: 35, name: "Vans Hylane Negra", brand: "Vans", retail: "$79.500", wholesale: "$66.000", img: "https://i.imgur.com/0YSalqT.png", desc: "Talles: 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/0YSalqT.png"]
+            },
+            { id: 36, name: "Vans Hylane Negra y Gris", brand: "Vans", retail: "$79.500", wholesale: "$66.000", img: "https://i.imgur.com/cqr6ZEn.png", desc: "Talles: 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/cqr6ZEn.png"]
+            },
+            { id: 37, name: "Vans Hylane Azul", brand: "Vans", retail: "$79.500", wholesale: "$66.000", img: "https://i.imgur.com/Cj6LBW6.png", desc: "Talles: 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/Cj6LBW6.png","https://i.imgur.com/sx3KH6a.png"]
+            },
+            { id: 38, name: "Vans Hylane Blanca", brand: "Vans", retail: "$79.500", wholesale: "$66.000", img: "https://i.imgur.com/sBsoOU6.png", desc: "Talles: 40, 41, 42, 43",
+              images: ["https://i.imgur.com/sBsoOU6.png","https://i.imgur.com/lUANMye.png"]
+            },
+            { id: 39, name: "Puma Suede XL Blanco y Negro", brand: "Puma", retail: "$78.800", wholesale: "$66.000", img: "https://i.imgur.com/xe36KJi.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43, 44",
+              images: ["https://i.imgur.com/xe36KJi.png","https://i.imgur.com/oAgqWXq.png"]
+            },
+            { id: 40, name: "Puma Suede XL Negra", brand: "Puma", retail: "$78.800", wholesale: "$66.000", img: "https://i.imgur.com/FJ90M0F.png", desc: "Talles: 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/THbx9X0.png"]
+            },
+            { id: 41, name: "Puma 180 Beige", brand: "Puma", retail: "$77.600", wholesale: "$68.000", img: "https://i.imgur.com/wSMfncK.png", desc: "Talles: 39, 40, 41, 42",
+              images: ["https://i.imgur.com/wSMfncK.png","https://i.imgur.com/pilsEGJ.png"]
+            },
+            { id: 42, name: "Puma 180 Negra y Blanca", brand: "Puma", retail: "$77.600", wholesale: "$68.000", img: "https://i.imgur.com/dTF2YZW.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42",
+              images: ["https://i.imgur.com/dTF2YZW.png","https://i.imgur.com/F24K505.png"]
+            },
+            { id: 43, name: "Puma 180 Negra", brand: "Puma", retail: "$77.600", wholesale: "$68.000", img: "https://i.imgur.com/oXXHTAN.png", desc: "Talles: 35, 36, 37, 38, 39",
+              images: ["https://i.imgur.com/oXXHTAN.png","https://i.imgur.com/ZAjUEH2.png"]
+            },
+            { id: 44, name: "NB 9060 Negra y Blanca", brand: "NB", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/NXAGVZR.png", desc: "Talles: 35, 36, 37, 38, 39",
+              images: ["https://i.imgur.com/NXAGVZR.png","https://i.imgur.com/ZNteg39.png"]
+            },
+            { id: 45, name: "NB 9060 Blanca", brand: "NB", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/toGaINQ.png", desc: "Talles: 35, 36, 37, 38, 39, 40",
+              images: ["https://i.imgur.com/toGaINQ.png","https://i.imgur.com/1NgxIqF.png"]
+            },
+            { id: 46, name: "NB 530 Blanca", brand: "NB", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/6OO32oX.png", desc: "Talles: 34, 35, 36, 37, 38, 39",
+              images: ["https://i.imgur.com/6OO32oX.png"]
+            },
+            { id: 47, name: "NB 530 Negra", brand: "NB", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/xjFIiXM.png", desc: "Talles: 35, 36, 37, 38, 39",
+              images: ["https://i.imgur.com/xjFIiXM.png"]
+            },
+            { id: 48, name: "NB 530 Beige", brand: "NB", retail: "$73.000", wholesale: "$68.000", img: "https://i.imgur.com/eZwfvRc.png", desc: "Talles: 35, 36, 37, 38, 39",
+              images: ["https://i.imgur.com/eZwfvRc.png"]
+            },
+            { id: 49, name: "Nike Dunk Low Bordo", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/yx7VOKJ.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/yx7VOKJ.png","https://i.imgur.com/ffk4Twe.png","https://i.imgur.com/15Zw5MX.png"]
+            },
+            { id: 50, name: "Nike Dunk Low Panda", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/ajvigQY.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43, 44",
+              images: ["https://i.imgur.com/ajvigQY.png","https://i.imgur.com/heA6Os5.png"]
+            },
+            { id: 51, name: "Nike Dunk Low Gris", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/6WtePzs.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43, 44",
+              images: ["https://i.imgur.com/6WtePzs.png","https://i.imgur.com/JHgVKrs.png"]
+            },
+            { id: 52, name: "Nike Dunk Low Azul", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/Rk16FQd.png", desc: "Talles: 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/Rk16FQd.png","https://i.imgur.com/oIDootL.png"]
+            },
+            { id: 53, name: "Nike Dunk Low Verde", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/SXSTkbI.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/SXSTkbI.png","https://i.imgur.com/NDM3PzA.png"]
+            },
+            { id: 54, name: "Nike Dunk Low Blanca", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/E3MYjqJ.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/E3MYjqJ.png","https://i.imgur.com/lkSJNnR.png"]
+            },
+            { id: 55, name: "Nike Jordan Retro 4 All black", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/1yDf20r.png", desc: "Talles: 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/1yDf20r.png","https://i.imgur.com/Zz1HfPD.png","https://i.imgur.com/JPVWefD.png","https://i.imgur.com/QrThW9w.png"]
+            },
+            { id: 56, name: "Nike Jordan Retro 4 Beige", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/yTJardB.png", desc: "Talles: 40, 41, 42, 43",
+              images: ["https://i.imgur.com/yTJardB.png"]
+            },
+            { id: 57, name: "Nike TravisScott All black", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/seYg4LC.png", desc: "Talles: 39, 40, 41, 42",
+              images: ["https://i.imgur.com/seYg4LC.png","https://i.imgur.com/Ae8UMYG.png"]
+            },
+            { id: 58, name: "Nike Jordan 1 mid Gris", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/fI70U7O.png", desc: "Talles: 35, 36, 37, 38, 39, 40",
+              images: ["https://i.imgur.com/fI70U7O.png","https://i.imgur.com/BA9Grjj.png"]
+            },
+            { id: 59, name: "Nike Jordan 1 mid Negra y Rojo", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/Z4Fr94G.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/Z4Fr94G.png","https://i.imgur.com/SwLtc9y.png",]
+            },
+            { id: 60, name: "Nike Jordan 1 mid Negra", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/mHyLuk0.png", desc: "Talles: 35, 36, 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/mHyLuk0.png","https://i.imgur.com/suVIdGD.png"]
+            },
+            { id: 61, name: "Nike Jordan 1 mid Rosa", brand: "Nike", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/SrYlKFY.png", desc: "Talles: 35, 36, 37, 38, 39, 40",
+              images: ["https://i.imgur.com/SrYlKFY.png","https://i.imgur.com/xbXqHiy.png"]
+            },
+            { id: 62, name: "Ojotas Nike Negras", brand: "Nike", retail: "$48.000", wholesale: "$40.000", img: "https://i.imgur.com/zzYhV89.png", desc: "Talles: 37, 38, 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/zzYhV89.png","https://i.imgur.com/jVIqhf8.png"]
+            },
+            { id: 63, name: "DC Court Graffik Negra y Blanco", brand: "DC", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/OKrnrg2.png", desc: "Talles: 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/OKrnrg2.png","https://i.imgur.com/THk3NFo.png"],  
+            },
+            { id: 64, name: "DC Court Graffik Negra", brand: "DC", retail: "$78.000", wholesale: "$63.000", img: "https://i.imgur.com/7vSCFI2.png", desc: "Talles: 39, 40, 41, 42, 43",
+              images: ["https://i.imgur.com/7vSCFI2.png"],  
+            },
+        ];
+
+        const productGrid = document.getElementById('productGrid');
+        const searchInput = document.getElementById('searchInput');
+        const btnsFilter = document.querySelectorAll('.btn-filter');
+        
+        let currentProduct = null;
+        let selectedSize = null;
+        // Rango de talles completo para generar los botones
+        const sizes = [];
+
+        function displayProducts(items) {
+            productGrid.innerHTML = items.map(item => `
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="product-card">
+                        <div class="card-img-container">
+                            <img src="${item.img}" alt="${item.name}" loading="lazy">
+                        </div>
+                        <div class="card-body">
+                            <div class="brand-tag">${item.brand}</div>
+                            <h5 class="product-title">${item.name}</h5>
+                            <div class="mt-auto-card">
+                                <div class="price-row">
+                                    <div class="price-col border-end pe-2 me-2 border-secondary">
+                                        <span class="price-label">Unitario</span>
+                                        <span class="price-val price-retail">${item.retail}</span>
+                                    </div>
+                                    <div class="price-col">
+                                        <span class="price-label text-success">Mayor</span>
+                                        <span class="price-val price-wholesale">${item.wholesale}</span>
+                                    </div>
+                                </div>
+                                <button class="btn-view" onclick="openModal(${item.id})">
+                                    Ver <i class="bi bi-eye-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts(category) {
+            btnsFilter.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            const filtered = category === 'all' ? products : products.filter(p => p.brand === category);
+            displayProducts(filtered);
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            btnsFilter.forEach(btn => btn.classList.remove('active'));
+            if (btnsFilter.length > 0) btnsFilter[0].classList.add('active'); 
+            displayProducts(products.filter(p => p.name.toLowerCase().includes(term) || p.brand.toLowerCase().includes(term)));
+        });
+
+        function changeModalImage(clickedThumbnail, imageUrl) {
+            document.getElementById('modalImage').src = imageUrl;
+            document.querySelectorAll('#modalThumbnails .thumbnail-img').forEach(img => {
+                img.classList.remove('active');
+            });
+            clickedThumbnail.classList.add('active');
+        }
+
+        function openModal(id) {
+            currentProduct = products.find(p => p.id === id);
+            selectedSize = null; 
+            document.getElementById('sizeAlert').classList.add('d-none');
+
+            if (!currentProduct) return;
+
+            document.getElementById('modalTitle').innerText = currentProduct.name;
+            document.getElementById('modalDesc').innerText = currentProduct.desc;
+            document.getElementById('modalRetail').innerText = currentProduct.retail;
+            document.getElementById('modalWholesale').innerText = currentProduct.wholesale;
+
+            // Miniaturas
+            const imageThumbnailsContainer = document.getElementById('modalThumbnails');
+            imageThumbnailsContainer.innerHTML = ''; 
+            
+            const imageList = currentProduct.images && currentProduct.images.length > 0 
+                              ? currentProduct.images 
+                              : [currentProduct.img]; 
+            
+            document.getElementById('modalImage').src = imageList[0];
+
+            imageList.forEach((imageUrl, index) => {
+                const isActive = index === 0;
+                imageThumbnailsContainer.innerHTML += `
+                    <img 
+                        src="${imageUrl}" 
+                        onclick="changeModalImage(this, '${imageUrl}')" 
+                        class="img-fluid thumbnail-img ${isActive ? 'active' : ''}"
+                        alt="Vista ${index + 1}"
+                    >
+                `;
+            });
+            
+            // Botones de Talle
+            const sizeContainer = document.getElementById('sizeContainer');
+            sizeContainer.innerHTML = sizes.map(size => 
+                `<button type="button" class="size-btn" onclick="selectSize(this, ${size})">${size}</button>`
+            ).join('');
+
+            new bootstrap.Modal(document.getElementById('productModal')).show();
+        }
+
+        function selectSize(btn, size) {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedSize = size;
+            document.getElementById('sizeAlert').classList.add('d-none');
+        }
+
+        function sendToWhatsapp() {
+          const productName = document.getElementById("modalTitle").textContent;
+          const retailPrice = document.getElementById("modalRetail").textContent;
+          const wholesalePrice = document.getElementById("modalWholesale").textContent;
+
+          // Mensaje sin talles
+          
+
+          const url = "https://wa.link/7ll4cg";
+            window.open(url, "_blank");
+        }
+
+        displayProducts(products);
+    </script>
+</body>
+</html>
